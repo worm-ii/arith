@@ -81,7 +81,7 @@ begin
   ExprMemo.SelLength := Length(ExprMemo.Text);
   try
     try
-      ResultMemo.Text := 'Ждите...';
+      ResultMemo.Text := 'Р–РґРёС‚Рµ...';
       ExprMemo.Update;
       ResultMemo.Update;
       PrecEdit.Update;
@@ -90,7 +90,7 @@ begin
       if ErrorPos <> Word(-1)
       then begin
         ExprMemo.SelStart := ErrorPos;
-        ResultMemo.Text := 'Синтаксическая ошибка';
+        ResultMemo.Text := 'РЎРёРЅС‚Р°РєСЃРёС‡РµСЃРєР°СЏ РѕС€РёР±РєР°';
       end
       else begin
         S := N.AsString;
