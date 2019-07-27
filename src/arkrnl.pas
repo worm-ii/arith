@@ -11,18 +11,18 @@ uses SysUtils, Classes, RTLConsts;
 {$I DEFINES.INC}
 
 const
-  MinDecPrec = 3; { Минимальная точность в значащих десятичных цифрах }
-  MaxDecPrec = 10000; { Максимальная точность в значащих десятичных цифрах }
-  MaxDecExp =  99999999; { Максимальный показатель десятичной экспоненты }
+  MinDecPrec = 3; { РњРёРЅРёРјР°Р»СЊРЅР°СЏ С‚РѕС‡РЅРѕСЃС‚СЊ РІ Р·РЅР°С‡Р°С‰РёС… РґРµСЃСЏС‚РёС‡РЅС‹С… С†РёС„СЂР°С… }
+  MaxDecPrec = 10000; { РњР°РєСЃРёРјР°Р»СЊРЅР°СЏ С‚РѕС‡РЅРѕСЃС‚СЊ РІ Р·РЅР°С‡Р°С‰РёС… РґРµСЃСЏС‚РёС‡РЅС‹С… С†РёС„СЂР°С… }
+  MaxDecExp =  99999999; { РњР°РєСЃРёРјР°Р»СЊРЅС‹Р№ РїРѕРєР°Р·Р°С‚РµР»СЊ РґРµСЃСЏС‚РёС‡РЅРѕР№ СЌРєСЃРїРѕРЅРµРЅС‚С‹ }
   MaxDecExpLen = 8;
 
   Log_2_10 = 3.32192809488736235; { Log_2 10 }
   DecToQWord = Log_2_10 / 64; { Log_(2^64) 10 }
-  SafeQWordCount = 3; { Количество дополнительных четверных слов для вычислений }
+  SafeQWordCount = 3; { РљРѕР»РёС‡РµСЃС‚РІРѕ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹С… С‡РµС‚РІРµСЂРЅС‹С… СЃР»РѕРІ РґР»СЏ РІС‹С‡РёСЃР»РµРЅРёР№ }
   MaxQWordPrec = Trunc(MaxDecPrec*DecToQWord + SafeQWordCount + 1);
-                  { Максимальная точность в четверных словах }
+                  { РњР°РєСЃРёРјР°Р»СЊРЅР°СЏ С‚РѕС‡РЅРѕСЃС‚СЊ РІ С‡РµС‚РІРµСЂРЅС‹С… СЃР»РѕРІР°С… }
   MaxBinExp = Trunc((MaxDecExp+1)*Log_2_10);
-                  { Максимальный показатель двоичной экспоненты }
+                  { РњР°РєСЃРёРјР°Р»СЊРЅС‹Р№ РїРѕРєР°Р·Р°С‚РµР»СЊ РґРІРѕРёС‡РЅРѕР№ СЌРєСЃРїРѕРЅРµРЅС‚С‹ }
 
 type
   TDecChar = '0'..'9';
@@ -68,7 +68,7 @@ const
   MinInt64: QWord = (Lo: 0; Hi: MinDWord);
 {$ENDIF}
 
-  // Коды исключений
+  // РљРѕРґС‹ РёСЃРєР»СЋС‡РµРЅРёР№
   ENUM_UNKNOWN = -1;
   ENUM_CONVERT = -2;
   ENUM_DIV_BY_ZERO = -3;
@@ -686,7 +686,7 @@ end;
 type
 TAuxControl = class(TControl)
 public
-  property Caption; { Нужно опубликовать эти свойства, чтобы пользоваться }
+  property Caption; { РќСѓР¶РЅРѕ РѕРїСѓР±Р»РёРєРѕРІР°С‚СЊ СЌС‚Рё СЃРІРѕР№СЃС‚РІР°, С‡С‚РѕР±С‹ РїРѕР»СЊР·РѕРІР°С‚СЊСЃСЏ }
   property Text;
 end;
 
@@ -712,11 +712,11 @@ end;
 
 function ExtCompareNums(X,Y: TNum; Flags: TTransformFlags;
            YShift: Integer): Integer;
-{ Расширенное сравнение чисел. Перед сравнением:
-    1) если tfXAbs in Flags, X берётся по абсолютной величине;
-       если tfXNeg in Flags, X изменяет знак;
-       флаги tfYAbs, tfYNeg аналогично влияют на Y;
-    2) Y умножается на 2^YShift
+{ Р Р°СЃС€РёСЂРµРЅРЅРѕРµ СЃСЂР°РІРЅРµРЅРёРµ С‡РёСЃРµР». РџРµСЂРµРґ СЃСЂР°РІРЅРµРЅРёРµРј:
+    1) РµСЃР»Рё tfXAbs in Flags, X Р±РµСЂС‘С‚СЃСЏ РїРѕ Р°Р±СЃРѕР»СЋС‚РЅРѕР№ РІРµР»РёС‡РёРЅРµ;
+       РµСЃР»Рё tfXNeg in Flags, X РёР·РјРµРЅСЏРµС‚ Р·РЅР°Рє;
+       С„Р»Р°РіРё tfYAbs, tfYNeg Р°РЅР°Р»РѕРіРёС‡РЅРѕ РІР»РёСЏСЋС‚ РЅР° Y;
+    2) Y СѓРјРЅРѕР¶Р°РµС‚СЃСЏ РЅР° 2^YShift
 }
 begin
   X.ValidateQWords;
@@ -798,7 +798,7 @@ end;
 
 
 procedure TNum.CheckMinMax;
-{ Проверяет, не вышло ли число за пределы диапазона представления }
+{ РџСЂРѕРІРµСЂСЏРµС‚, РЅРµ РІС‹С€Р»Рѕ Р»Рё С‡РёСЃР»Рѕ Р·Р° РїСЂРµРґРµР»С‹ РґРёР°РїР°Р·РѕРЅР° РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ }
 var
   SaveSign: TSign;
 begin
@@ -815,11 +815,11 @@ begin
 end;
 
 procedure TNum.CheckZero(ABinExp,ADecPrec: Integer);
-{ Если 2^ABinExp / Self > 10^ADecPrec (грубо!), то Self обнуляется
-  Полезная процедура для нек-рых операций (вычитание, синус, и т.д.)
-  Если результат операции близок к нулю по сравнению с аргументом(-ами)
-  (критерий близости - точность аргумента(-ов)), то этот результат
-  считается нулём. }
+{ Р•СЃР»Рё 2^ABinExp / Self > 10^ADecPrec (РіСЂСѓР±Рѕ!), С‚Рѕ Self РѕР±РЅСѓР»СЏРµС‚СЃСЏ
+  РџРѕР»РµР·РЅР°СЏ РїСЂРѕС†РµРґСѓСЂР° РґР»СЏ РЅРµРє-СЂС‹С… РѕРїРµСЂР°С†РёР№ (РІС‹С‡РёС‚Р°РЅРёРµ, СЃРёРЅСѓСЃ, Рё С‚.Рґ.)
+  Р•СЃР»Рё СЂРµР·СѓР»СЊС‚Р°С‚ РѕРїРµСЂР°С†РёРё Р±Р»РёР·РѕРє Рє РЅСѓР»СЋ РїРѕ СЃСЂР°РІРЅРµРЅРёСЋ СЃ Р°СЂРіСѓРјРµРЅС‚РѕРј(-Р°РјРё)
+  (РєСЂРёС‚РµСЂРёР№ Р±Р»РёР·РѕСЃС‚Рё - С‚РѕС‡РЅРѕСЃС‚СЊ Р°СЂРіСѓРјРµРЅС‚Р°(-РѕРІ)), С‚Рѕ СЌС‚РѕС‚ СЂРµР·СѓР»СЊС‚Р°С‚
+  СЃС‡РёС‚Р°РµС‚СЃСЏ РЅСѓР»С‘Рј. }
 begin
   if   (Sign <> Zero)
    and (Trunc((ABinExp-BinExp-1)/Log_2_10) > ADecPrec)
@@ -1818,7 +1818,7 @@ begin
   if FDecPrec <> ADecPrec then
   begin
     NewQWordPrec := DecsToQWords(ADecPrec);
-    { Проверка на возможную ошибку (округление за пределы диапазона) }
+    { РџСЂРѕРІРµСЂРєР° РЅР° РІРѕР·РјРѕР¶РЅСѓСЋ РѕС€РёР±РєСѓ (РѕРєСЂСѓРіР»РµРЅРёРµ Р·Р° РїСЂРµРґРµР»С‹ РґРёР°РїР°Р·РѕРЅР°) }
     if FDecsValid and (ADecPrec < FDecPrec) then
     begin
       LastDigit := FDecDigits[ADecPrec];
@@ -2081,7 +2081,7 @@ begin
        else raise ENumDivByZero.Create(SDivByZero);
   WorkPrec := Trunc((X.BinExp-Y.BinExp+2)/Log_2_10) + 1;
   WorkPrec := IntMax(WorkPrec,MinDecPrec);
-  if WorkPrec > MaxDecPrec + 6 { Потеря точности. Ничего не поделаешь :( }
+  if WorkPrec > MaxDecPrec + 6 { РџРѕС‚РµСЂСЏ С‚РѕС‡РЅРѕСЃС‚Рё. РќРёС‡РµРіРѕ РЅРµ РїРѕРґРµР»Р°РµС€СЊ :( }
   then WorkPrec := MaxDecPrec + 6;
   Z := nil;
   U := nil;
@@ -2100,7 +2100,7 @@ begin
       U := TNum.Create(WorkPrec);
       {$IFDEF ARKRNL_RANGE} {$R+} {$ENDIF}
       U.Copy(Z);
-      U.Prod(U,Y); { исключений не должно быть }
+      U.Prod(U,Y); { РёСЃРєР»СЋС‡РµРЅРёР№ РЅРµ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ }
       Remainder.Diff(X,U);
     end;
     Copy(Z);
@@ -2140,7 +2140,7 @@ begin
     A.Copy(numOne);
     B.Copy(numOne);
     D.Prod(Arg,Arg);
-    { A - аккумулятор
+    { A - Р°РєРєСѓРјСѓР»СЏС‚РѕСЂ
       B = t^k/k!
       D = t^2
       E = k*(k-1) }
@@ -2206,7 +2206,7 @@ begin
          else Result.Copy(numOne)
     else begin
       { 0 < Y < Pi }
-      Inc(Y.FBinExp,2); { Мне можно так умножать на 4 :) }
+      Inc(Y.FBinExp,2); { РњРЅРµ РјРѕР¶РЅРѕ С‚Р°Рє СѓРјРЅРѕР¶Р°С‚СЊ РЅР° 4 :) }
       Z.DecPrec := MinDecPrec;
       Z.DivMod(Y,numPi,nil); { Z \in [0..3] }
       case Z.AsInteger of
@@ -2327,11 +2327,11 @@ begin
     Z.Neg(Z);
     U.Copy(Y);
     W.Copy(Y);
-    { Y - аргумент
+    { Y - Р°СЂРіСѓРјРµРЅС‚
       Z = -Y^2
       U = (-1)^i*Y^(2*i+1)
       V = U / (2*i+1)
-      W - аккумулятор }
+      W - Р°РєРєСѓРјСѓР»СЏС‚РѕСЂ }
     i := 1;
     repeat
       U.Prod(U,Z);
@@ -2389,9 +2389,9 @@ begin
     Z := TNum.Create(WorkPrec);
     U := TNum.Create(WorkPrec);
     {$IFDEF ARKRNL_RANGE} {$R+} {$ENDIF}
-    { Y - аргумент
+    { Y - Р°СЂРіСѓРјРµРЅС‚
       Z = Y^i/i!
-      U = аккумулятор }
+      U = Р°РєРєСѓРјСѓР»СЏС‚РѕСЂ }
     Y.Abs_(X);
 
     if Y.FBinExp < 0
@@ -2477,10 +2477,10 @@ begin
     Y.Diff(Y,numOne);
     if Y.Sign <> Zero then
     begin
-      { Y - аргумент
+      { Y - Р°СЂРіСѓРјРµРЅС‚
         Z = Y^(i-1)
         U = Z/i
-        W = текущая сумма }
+        W = С‚РµРєСѓС‰Р°СЏ СЃСѓРјРјР° }
       Z.Copy(Y);
       U.Quot(Z,numTwo);
       W.Copy(numOne);
@@ -2552,7 +2552,7 @@ begin
       Y.Sum(Z,Y);
       Y.Prod(Y,numHalf);
       Z.Diff(Y,Z);
-      { Относительная точность < 2^(2*Z.FBinExp-X.FBinExp+1) }
+      { РћС‚РЅРѕСЃРёС‚РµР»СЊРЅР°СЏ С‚РѕС‡РЅРѕСЃС‚СЊ < 2^(2*Z.FBinExp-X.FBinExp+1) }
       if CurPrec = WorkPrec then Break;
       if Z.Sign = Zero
       then CurPrec := IntMin(2*CurPrec,WorkPrec)
@@ -2586,7 +2586,7 @@ begin
   if IsConst then raise ENumConst.Create(SNumConst);
   X.ValidateQWords;
   if X.BinExp >= X.FQWordPrec*64-1 then
-  begin  { Заодно избегаем возможного переполнения при копировании }
+  begin  { Р—Р°РѕРґРЅРѕ РёР·Р±РµРіР°РµРј РІРѕР·РјРѕР¶РЅРѕРіРѕ РїРµСЂРµРїРѕР»РЅРµРЅРёСЏ РїСЂРё РєРѕРїРёСЂРѕРІР°РЅРёРё }
     Sign := Zero;
     Exit;
   end;
@@ -2632,7 +2632,7 @@ begin
   then Sign := Zero
   else begin
     //if IsAllBitsEqual(FQWordDigits,FQWordPrec,0,FQWordPrec*64-BinExp-2,False)
-    //then Exit; { Уже целое }
+    //then Exit; { РЈР¶Рµ С†РµР»РѕРµ }
     ResetBits(FQWordDigits,FQWordPrec,0,FQWordPrec*64-BinExp-2);
     if Sign = Positive
     then Sum(Self,numOne);
@@ -2648,7 +2648,7 @@ begin
   then Sign := Zero
   else begin
     //if IsAllBitsEqual(FQWordDigits,FQWordPrec,0,FQWordPrec*64-BinExp-2,False)
-    //then Exit; { Уже целое }
+    //then Exit; { РЈР¶Рµ С†РµР»РѕРµ }
     ResetBits(FQWordDigits,FQWordPrec,0,FQWordPrec*64-BinExp-2);
     if Sign = Negative
     then Diff(Self,numOne);
@@ -2818,7 +2818,7 @@ begin
   // not implemented yet
 end;
 
-{ Функции для облегчения работы }
+{ Р¤СѓРЅРєС†РёРё РґР»СЏ РѕР±Р»РµРіС‡РµРЅРёСЏ СЂР°Р±РѕС‚С‹ }
 
 const
   MaxConsts = 10;
@@ -3831,7 +3831,7 @@ end;
 
 {$IFDEF D4PLUS}
 
-{ Функции для облегчения работы в Delphi 4+ }
+{ Р¤СѓРЅРєС†РёРё РґР»СЏ РѕР±Р»РµРіС‡РµРЅРёСЏ СЂР°Р±РѕС‚С‹ РІ Delphi 4+ }
 
 function TNum.GT(X: Extended): Boolean;
 begin
@@ -4180,7 +4180,7 @@ end;
 
 {$ENDIF}
 
-{ Исключения }
+{ РСЃРєР»СЋС‡РµРЅРёСЏ }
 
 function ENum.GetErrorCode: Integer;
 begin
