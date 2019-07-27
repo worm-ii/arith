@@ -1,4 +1,3 @@
 # arith
-Arbitrary precision floaing point library in Delphi.
+Arbitrary precision floaing point library for 32-bit Delphi.
 UI, docs and comments are in Russian.
-32-bit only (Delphi 2 32-bit and higher)
