@@ -1,5 +1,5 @@
-*.pas encoding=cp1252
-*.inc encoding=cp1252
-*.dpr encoding=cp1252
-*.txt encoding=cp1252
-*.cnt encoding=cp1252
+*.pas encoding=cp1251
+*.inc encoding=cp1251
+*.dpr encoding=cp1251
+*.txt encoding=cp1251
+*.cnt encoding=cp1251
