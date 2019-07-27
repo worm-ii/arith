@@ -1,3 +1,3 @@
 # arith
 Arbitrary precision floaing point library in Delphi.
-UI and comments are in Russian
+UI, docs and comments are in Russian
