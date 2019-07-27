@@ -1,0 +1,15 @@
+; This contents file was created with HelpScribble 5.3.1
+; *** UNREGISTERED ***
+
+:BASE Arith.hlp
+:TITLE Справка по БАВТ 2.0
+1 Содержание=hlp_Contents
+1 Обзор
+2 Работа с библиотекой=hlp_HowToWork
+2 Математические функции=hlp_Math
+2 Обработка исключительных ситуаций=hlp_Exceptions
+2 Примеры использования=hlp_Examples
+1 Объект TNum
+2 Использование=class_TNum
+2 Свойства=hlp_Properties
+2 Методы=hlp_Methods
