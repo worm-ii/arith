@@ -2229,7 +2229,8 @@ begin
         else raise ENum.Create(SInternal);
       end;
     end;
-    Result.Sign := MulSigns(Result.Sign,TempSign);
+    if Sinus
+    then Result.Sign := MulSigns(Result.Sign,TempSign);
   finally
     Z.Free;
     Y.Free;

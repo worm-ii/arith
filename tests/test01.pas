@@ -6,10 +6,13 @@ unit Test01;
 
 interface
 
-uses ArKrnl;
+uses ArKrnl, ArStacks;
 
 var
   MaxTestDecPrec: Integer = 700;
+
+procedure SetDebugStage(const Stage: string);
+function GetDebugStage: string;
 
 function RandomSign: TSign;
 function Equals(N1,N2: TNum): Boolean;
@@ -26,6 +29,7 @@ procedure TestSqr(X: TNum);
 procedure TestSqrt(X: TNum);
 procedure TestLn(X: TNum);
 procedure TestExp(X: TNum);
+procedure TestTrig(X: TNum);
 
 procedure TestIntPower(X: TNum; Pow: Integer);
 procedure TestValidateDecs(X: TNum);
@@ -34,6 +38,19 @@ procedure TestValidateDecs(X: TNum);
 implementation
 
 uses Const_00;
+
+var
+  DebugStage: string = '';
+
+procedure SetDebugStage(const Stage: string);
+begin
+  DebugStage := Stage;
+end;
+
+function GetDebugStage: string;
+begin
+  Result := DebugStage;
+end;
 
 type
   TQWordRec = array[0..3] of Word;
@@ -75,7 +92,7 @@ end;
 
 procedure CheckEquals(X,Y: TNum);
 begin
-  if not Equals(X,Y) then raise ENum.Create('Numbers are not equal');
+  if not Equals(X,Y) then raise ENum.Create('Numbers are not equal: ' + X.AsString + ' <> ' + Y.AsString);
 end;
 
 function TestNum(N: TNum): Boolean;
@@ -119,7 +136,6 @@ function RandomNum01: TNum;
 var
   i: Integer;
   NextQWord: QWord;
-  HighBit: Boolean;
 begin
   Result := TNum.Create(RandomPrec);
   try
@@ -141,6 +157,7 @@ procedure TestSum(X,Y: TNum; R: TNum = nil);
 var
   Z: TNum;
 begin
+  SetDebugStage('TestSum');
   CheckNum(X);
   CheckNum(Y);
   Z := TNum.Create(RandomPrec);
@@ -161,6 +178,7 @@ procedure TestDiff(X,Y: TNum; R: TNum = nil);
 var
   Z: TNum;
 begin
+  SetDebugStage('TestDiff');
   CheckNum(X);
   CheckNum(Y);
   Z := TNum.Create(RandomPrec);
@@ -181,6 +199,7 @@ procedure TestProd(X,Y: TNum; R: TNum = nil);
 var
   Z,R1: TNum;
 begin
+  SetDebugStage('TestProd');
   CheckNum(X);
   CheckNum(Y);
   Z := TNum.Create(X.DecPrec+2);
@@ -210,6 +229,7 @@ var
   Z,R1: TNum;
   YZero: Boolean;
 begin
+  SetDebugStage('TestQuot');
   CheckNum(X);
   //CheckNum(Y);
   Z := TNum.Create(X.DecPrec+2);
@@ -244,6 +264,7 @@ var
   Z: TNum;
   XNeg: Boolean;
 begin
+  SetDebugStage('TestSqr');
   CheckNum(X);
   Z := TNum.Create(RandomPrec);
   try
@@ -265,6 +286,7 @@ var
   Z: TNum;
   XNeg: Boolean;
 begin
+  SetDebugStage('TestSqrt');
   CheckNum(X);
   Z := TNum.Create(RandomPrec);
   try
@@ -292,6 +314,7 @@ var
   Z: TNum;
   XPos: Boolean;
 begin
+  SetDebugStage('TestLn');
   CheckNum(X);
   Z := TNum.Create(RandomPrec);
   try
@@ -323,6 +346,7 @@ procedure TestExp(X: TNum);
 var
   Z: TNum;
 begin
+  SetDebugStage('TestExp');
   CheckNum(X);
   if X.GT(LnMaxPlus) or X.LT(LnMinPlus) then Exit;
   Z := TNum.Create(RandomPrec);
@@ -338,12 +362,59 @@ begin
   end;
 end;
 
+procedure TestTrig(X: TNum);
+var
+  Z, XScaled: TAddNum;
+  i: Integer;
+begin
+  SetDebugStage('TestTrig');
+  CheckNum(X);
+  ArStacks.SetDeg(False);
+  Z := TAddNum.Create(RandomPrec);
+  XScaled := TAddNum.Create(X.DecPrec);
+  try
+    XScaled.Copy(X);
+    for i := 0 to 10 do
+    begin
+      if not (XScaled.GT(+1) or XScaled.LT(-1))
+      then Break;
+      XScaled.Quot(XScaled, 10);
+    end;
+    if XScaled.GT(+1) or XScaled.LT(-1)
+    then raise ENum.Create('Number is too big: ' + X.AsString);
+
+    SetDebugStage('TestTrig.Sin');
+    Z.DgArcSin(XScaled);
+    CheckNum(Z);
+    Z.Sin_(Z);
+    CheckNum(Z);
+    CheckEquals(Z,XScaled);
+
+    SetDebugStage('TestTrig.Cos');
+    Z.DgArcCos(XScaled);
+    CheckNum(Z);
+    Z.Cos_(Z);
+    CheckNum(Z);
+    CheckEquals(Z,XScaled);
+
+    SetDebugStage('TestTrig.Tan');
+    Z.DgArcTan(X);
+    CheckNum(Z);
+    Z.DgTan(Z);
+    CheckNum(Z);
+    CheckEquals(Z,X);
+  finally
+    Z.Free;
+  end;
+end;
+
 procedure TestIntPower(X: TNum; Pow: Integer);
 var
   m: Boolean;
   k,WorkPrec: Integer;
   Y: TNum;
 begin
+  SetDebugStage('TestIntPower');
   m := False;
   if Pow = 0 then
   begin
@@ -391,10 +462,8 @@ procedure TestValidateDecs(X: TNum);
 var
   Y,Z: TNum;
   i,TempDecExp,DecExpInc: Integer;
-  NextDigit: TDecDigit;
-  Carry: Boolean;
-  Buffer: TDecDigits;
 begin
+  SetDebugStage('TestValidateDecs');
   if X.Sign = Zero then
   begin
     Exit;

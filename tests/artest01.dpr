@@ -22,6 +22,7 @@ begin
   TestSqrt(Y);
   TestExp(Y);
   TestLn(X);
+  TestTrig(X);
 end;
 
 procedure TestChainFraction;
@@ -86,10 +87,13 @@ begin
       end;
       Write('Done: ',i,' of ',Count,'':20,#13);
     end;
+    SetDebugStage('TestChainFraction');
     TestChainFraction;
-    WriteLn('All done!','':20);
+    SetDebugStage('All done');
   finally
     S.Free;
+    WriteLn;
+    WriteLn('Stage: ', GetDebugStage);
     ReadLn;
   end;
 end;
